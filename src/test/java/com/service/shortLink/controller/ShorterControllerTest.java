@@ -31,6 +31,57 @@ class ShorterControllerTest {
     private ShorterServiceInterface shorterServiceInterface;
 
     /**
+     * Method under test: {@link ShorterController#createShortUrl(Shorter)}
+     */
+    @Test
+    void testCreateShortUrl() throws Exception {
+        when(this.shorterServiceInterface.createShortUrl((Shorter) any())).thenReturn("https://example.org/example");
+
+        Shorter shorter = new Shorter();
+        shorter.setCreatedAt(null);
+        shorter.setHash("Hash");
+        shorter.setId(123L);
+        shorter.setOriginalUrl("https://example.org/example");
+        String content = (new ObjectMapper()).writeValueAsString(shorter);
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.post("/url/addHash")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(content);
+        MockMvcBuilders.standaloneSetup(this.shorterController)
+                .build()
+                .perform(requestBuilder)
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().contentType("text/plain;charset=ISO-8859-1"))
+                .andExpect(MockMvcResultMatchers.content().string("https://example.org/example"));
+    }
+
+    /**
+     * Method under test: {@link ShorterController#getAll()}
+     */
+    @Test
+    void testGetAll() throws Exception {
+        when(this.shorterServiceInterface.getAll()).thenReturn(new ResponseEntity(HttpStatus.CONTINUE));
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/url/allHash");
+        ResultActions actualPerformResult = MockMvcBuilders.standaloneSetup(this.shorterController)
+                .build()
+                .perform(requestBuilder);
+        actualPerformResult.andExpect(MockMvcResultMatchers.status().is(100));
+    }
+
+    /**
+     * Method under test: {@link ShorterController#getAll()}
+     */
+    @Test
+    void testGetAll2() throws Exception {
+        when(this.shorterServiceInterface.getAll()).thenReturn(new ResponseEntity(HttpStatus.CONTINUE));
+        MockHttpServletRequestBuilder getResult = MockMvcRequestBuilders.get("/url/allHash");
+        getResult.contentType("https://example.org/example");
+        ResultActions actualPerformResult = MockMvcBuilders.standaloneSetup(this.shorterController)
+                .build()
+                .perform(getResult);
+        actualPerformResult.andExpect(MockMvcResultMatchers.status().is(100));
+    }
+
+    /**
      * Method under test: {@link ShorterController#redirectShorter(String)}
      */
     @Test
