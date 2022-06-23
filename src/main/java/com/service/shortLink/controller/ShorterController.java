@@ -23,7 +23,7 @@ public class ShorterController {
 
     @PostMapping(path = "/addHash", consumes = APPLICATION_JSON_VALUE)
     @ApiOperation("Create short url")
-    public Shorter createShortUrl(@RequestBody Shorter shorter) {
+    public String createShortUrl(@RequestBody Shorter shorter) {
         return serviceInterface.createShortUrl(shorter);
     }
 

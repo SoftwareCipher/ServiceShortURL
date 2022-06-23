@@ -31,38 +31,6 @@ class ShorterControllerTest {
     private ShorterServiceInterface shorterServiceInterface;
 
     /**
-     * Method under test: {@link ShorterController#createShortUrl(Shorter)}
-     */
-    @Test
-    void testCreateShortUrl() throws Exception {
-        Shorter shorter = new Shorter();
-        shorter.setCreatedAt(null);
-        shorter.setHash("Hash");
-        shorter.setId(123L);
-        shorter.setOriginalUrl("https://example.org/example");
-        when(this.shorterServiceInterface.createShortUrl((Shorter) any())).thenReturn(shorter);
-
-        Shorter shorter1 = new Shorter();
-        shorter1.setCreatedAt(null);
-        shorter1.setHash("Hash");
-        shorter1.setId(123L);
-        shorter1.setOriginalUrl("https://example.org/example");
-        String content = (new ObjectMapper()).writeValueAsString(shorter1);
-        MockHttpServletRequestBuilder requestBuilder =
-                MockMvcRequestBuilders.post("/url/addHash")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(content);
-        MockMvcBuilders.standaloneSetup(this.shorterController)
-                .build()
-                .perform(requestBuilder)
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
-                .andExpect(MockMvcResultMatchers.content()
-                        .string(
-                                "{\"id\":123,\"hash\":\"Hash\",\"originalUrl\":\"https://example.org/example\",\"createdAt\":null}"));
-    }
-
-    /**
      * Method under test: {@link ShorterController#redirectShorter(String)}
      */
     @Test

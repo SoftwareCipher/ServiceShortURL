@@ -4,7 +4,7 @@ import com.service.shortLink.entity.Shorter;
 import org.springframework.http.ResponseEntity;
 
 public interface ShorterServiceInterface {
-    Shorter createShortUrl(Shorter shorter);
+    String createShortUrl(Shorter shorter);
 
     ResponseEntity responseEntity(String hash);
 

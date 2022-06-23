@@ -27,12 +27,13 @@ public class ShortUrlService implements ShorterServiceInterface {
     }
 
     @Override
-    public Shorter createShortUrl(Shorter shorter) {
+    public String createShortUrl(Shorter shorter) {
         String hash = codeGenerator.generate(shorterUrlLength);
         if (shorter != null) {
             String shorterString = URLDecoder.decode(shorter.getOriginalUrl());
             shorter = new Shorter(null, hash, shorterString, ZonedDateTime.now());
-            return repository.save(shorter);
+            repository.save(shorter);
+            return "http://localhost:8080/url/" + shorter.getHash();
         }else{
             return null;
         }
